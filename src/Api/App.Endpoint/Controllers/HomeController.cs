@@ -14,7 +14,7 @@ namespace Rat.Endpoint.Controllers
         [HttpGet]
         public virtual IEnumerable<string> Get()
         {
-            return new string[] { "Hello", "api", "world" };
+            return new string[] { "API", "app", "is", "running" };
         }
     }
 }
