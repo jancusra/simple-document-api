@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using App.Contracts.Models;
 using App.Domain.Entities;
 using App.Mapper;
-using App.Persistence;
+using App.Persistence.DataProvider;
 
 namespace Rat.Endpoint.Controllers
 {

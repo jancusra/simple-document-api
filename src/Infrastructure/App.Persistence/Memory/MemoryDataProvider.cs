@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Caching.Memory;
+using App.Persistence.DataProvider;
 
-namespace App.Persistence
+namespace App.Persistence.Memory
 {
     public class MemoryDataProvider : BaseDataProvider, IDataProvider
     {

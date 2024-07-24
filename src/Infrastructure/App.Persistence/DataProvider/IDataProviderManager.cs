@@ -1,4 +1,4 @@
-﻿namespace App.Persistence
+﻿namespace App.Persistence.DataProvider
 {
     public partial interface IDataProviderManager
     {

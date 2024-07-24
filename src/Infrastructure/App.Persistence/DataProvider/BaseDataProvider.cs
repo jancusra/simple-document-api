@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using App.Domain;
 
-namespace App.Persistence
+namespace App.Persistence.DataProvider
 {
     public abstract class BaseDataProvider
     {
@@ -18,7 +18,7 @@ namespace App.Persistence
 
             if (doc == null)
             {
-                await InsertDocumentAsync<TEntity>(entity);
+                await InsertDocumentAsync(entity);
             }
         }
     }

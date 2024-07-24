@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System;
 
-namespace App.Persistence
+namespace App.Persistence.DataProvider
 {
     public interface IDataProvider
     {

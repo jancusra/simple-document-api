@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using App.Persistence;
+using App.Persistence.Database;
+using App.Persistence.DataProvider;
 
 namespace App.Web
 {
@@ -31,6 +34,8 @@ namespace App.Web
             //see https://docs.microsoft.com/dotnet/framework/network-programming/tls
             ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
 
+            services.Configure<StorageTypeConfig>(_configuration);
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<IDataProviderManager, DataProviderManager>()
@@ -38,7 +43,13 @@ namespace App.Web
                         serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
 
             services.AddMemoryCache();
-            services.AddControllers();
+
+            services.AddDbContext<AppDbContext>();
+
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         }
 
         /// <summary>
