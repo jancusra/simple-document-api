@@ -1,4 +1,5 @@
 using System.Net;
+using App.Persistence;
 
 namespace App.Web
 {
@@ -26,6 +27,9 @@ namespace App.Web
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddScoped<IDataProvider, MemoryDataProvider>();
+
+            services.AddMemoryCache();
             services.AddControllers();
         }
 

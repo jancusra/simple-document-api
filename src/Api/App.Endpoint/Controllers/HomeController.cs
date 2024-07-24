@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Rat.Endpoint.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public partial class HomeController : ControllerBase
     {
         /// <summary>
