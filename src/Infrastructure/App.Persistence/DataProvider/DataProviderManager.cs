@@ -15,12 +15,16 @@ namespace App.Persistence.DataProvider
 
         private readonly IMemoryCache _memoryCache;
 
+        private readonly AppDbContext _appDbContext;
+
         public DataProviderManager(
             IOptions<StorageTypeConfig> storageType,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            AppDbContext appDbContext)
         {
             _storageType = storageType;
             _memoryCache = memoryCache;
+            _appDbContext = appDbContext;
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace App.Persistence.DataProvider
             return _storageType.Value.StorageType switch
             {
                 StorageType.Memory => new MemoryDataProvider(_memoryCache),
-                StorageType.SqlServer => new SqlServerDataProvider(),
+                StorageType.SqlServer => new SqlServerDataProvider(_appDbContext),
                 _ => throw new Exception($"Not supported data provider name: '{_storageType.Value.StorageType}'")
             };
         }

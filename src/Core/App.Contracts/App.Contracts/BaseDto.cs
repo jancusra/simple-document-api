@@ -2,7 +2,7 @@
 
 namespace App.Contracts
 {
-    public class BaseDto
+    public partial class BaseDto
     {
         public Guid id { get; set; }
     }

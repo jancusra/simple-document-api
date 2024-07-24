@@ -4,7 +4,7 @@ using System;
 
 namespace App.Persistence.DataProvider
 {
-    public interface IDataProvider
+    public partial interface IDataProvider
     {
         public Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity;
 

@@ -1,36 +1,35 @@
-﻿using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.Caching.Memory;
+﻿using System;
+using System.Threading.Tasks;
 using App.Persistence.DataProvider;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Persistence.Database
 {
-    public class SqlServerDataProvider : BaseDataProvider, IDataProvider
+    public partial class SqlServerDataProvider : BaseDataProvider, IDataProvider
     {
-        public SqlServerDataProvider()
+        private readonly AppDbContext _appDbContext;
+
+        public SqlServerDataProvider(
+            AppDbContext appDbContext)
         {
+            _appDbContext = appDbContext;
         }
 
         public override async Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id)
         {
-            
-            await Task.FromResult(0);
-
-            return null;
+            return await _appDbContext.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public override async Task InsertDocumentAsync<TEntity>(TEntity entity)
         {
-            
-
-            await Task.FromResult(0);
+            await _appDbContext.Set<TEntity>().AddAsync(entity);
+            await _appDbContext.SaveChangesAsync();
         }
 
         public override async Task UpdateDocumentAsync<TEntity>(TEntity entity)
         {
-            
-
-            await Task.FromResult(0);
+            _appDbContext.Set<TEntity>().Update(entity);
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

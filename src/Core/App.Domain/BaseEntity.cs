@@ -2,7 +2,7 @@
 
 namespace App.Domain
 {
-    public class BaseEntity
+    public partial class BaseEntity
     {
         public Guid Id { get; set; }
     }

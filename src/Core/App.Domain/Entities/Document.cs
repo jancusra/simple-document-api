@@ -1,6 +1,6 @@
 ﻿namespace App.Domain.Entities
 {
-    public class Document : BaseEntity
+    public partial class Document : BaseEntity
     {
         public string Value { get; set; }
     }

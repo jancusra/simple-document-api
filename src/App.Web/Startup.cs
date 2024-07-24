@@ -35,6 +35,7 @@ namespace App.Web
             ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
 
             services.Configure<StorageTypeConfig>(_configuration);
+            services.Configure<DatabaseConfiguration>(_configuration);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -43,8 +44,7 @@ namespace App.Web
                         serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
 
             services.AddMemoryCache();
-
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContext<IAppDbContext, AppDbContext>();
 
             services.AddControllers().AddJsonOptions(options =>
             {

@@ -34,9 +34,9 @@ namespace App.Web
                 });
 
         /// <summary>
-        /// Update the database model (apply configured migrations)
+        /// Create database and necessary tables
         /// </summary>
-        /// <param name="serviceProvider">web services</param>
+        /// <param name="serviceProvider">builded web services</param>
         private static void DbMigration(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())

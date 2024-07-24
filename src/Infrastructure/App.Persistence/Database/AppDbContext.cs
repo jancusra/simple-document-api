@@ -1,15 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using App.Domain.Entities;
+using App.Domain;
 
 namespace App.Persistence.Database
 {
-    public class AppDbContext : DbContext
+    public partial class AppDbContext : DbContext, IAppDbContext
     {
-        public DbSet<Document> Documents { get; set; }
+        private readonly IOptions<DatabaseConfiguration> _databaseConfiguration;
+
+        public AppDbContext(IOptions<DatabaseConfiguration> databaseConfiguration)
+        {
+            _databaseConfiguration = databaseConfiguration;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=AppApi;User ID=sa;Password=local456***;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer(_databaseConfiguration.Value.ConnectionString);
         }
+
+        public DbSet<TEntity> Table<TEntity>() where TEntity : BaseEntity
+        {
+            return Set<TEntity>();
+        }
+
+        public DbSet<Document> Documents { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace App.Contracts.Models
 {
-    public class DocumentDto : BaseDto
+    public partial class DocumentDto : BaseDto
     {
         public string[] tags { get; set; }
 

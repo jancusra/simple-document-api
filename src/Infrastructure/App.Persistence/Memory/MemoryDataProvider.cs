@@ -5,7 +5,7 @@ using App.Persistence.DataProvider;
 
 namespace App.Persistence.Memory
 {
-    public class MemoryDataProvider : BaseDataProvider, IDataProvider
+    public partial class MemoryDataProvider : BaseDataProvider, IDataProvider
     {
         private readonly IMemoryCache _memoryCache;
 
