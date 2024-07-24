@@ -9,6 +9,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Core\App.Mapper\App.Mapper\App.Mapper.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\App.Persistence\App.Persistence.csproj" />
 	</ItemGroup>
 

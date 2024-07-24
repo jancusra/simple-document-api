@@ -1,4 +1,10 @@
 using System.Net;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using App.Persistence;
 
 namespace App.Web
@@ -27,7 +33,9 @@ namespace App.Web
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddScoped<IDataProvider, MemoryDataProvider>();
+            services.AddTransient<IDataProviderManager, DataProviderManager>()
+                    .AddTransient(serviceProvider =>
+                        serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
 
             services.AddMemoryCache();
             services.AddControllers();

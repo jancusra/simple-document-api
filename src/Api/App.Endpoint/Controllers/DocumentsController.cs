@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using App.Contracts.Models;
 using App.Domain.Entities;
+using App.Mapper;
 using App.Persistence;
 
 namespace Rat.Endpoint.Controllers
@@ -23,34 +24,25 @@ namespace Rat.Endpoint.Controllers
         {
             var result = await _dataProvider.GetDocumentByIdAsync<Document>(id);
 
-            return Ok(JsonSerializer.Deserialize<DocumentDto>(result.Value));
+            return Ok(result.ToDtoModel());
         }
 
         [Route("[controller]")]
         [HttpPost]
         public virtual async Task<IActionResult> AddDocument([FromBody]DocumentDto model)
         {
-            await _dataProvider.AddDocumentAsync(new Document { Id = model.id, Value = JsonSerializer.Serialize(model) });
+            await _dataProvider.AddDocumentAsync(model.ToEntity());
 
             return Ok();
         }
 
         [Route("[controller]")]
         [HttpPut]
-        public virtual async Task<IActionResult> UpdateDocument([FromBody] DocumentDto model)
+        public virtual async Task<IActionResult> UpdateDocument([FromBody]DocumentDto model)
         {
-            await _dataProvider.UpdateDocumentAsync(new Document { Id = model.id, Value = JsonSerializer.Serialize(model) });
+            await _dataProvider.UpdateDocumentAsync(model.ToEntity());
 
             return Ok();
-        }
-
-        public class DocumentDto
-        {
-            public Guid id { get; set; }
-
-            public string[] tags { get; set; }
-
-            public object data { get; set; }
         }
     }
 }
