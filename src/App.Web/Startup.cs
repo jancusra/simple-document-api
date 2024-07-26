@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Alphacloud.MessagePack.AspNetCore.Formatters;
 using App.Persistence;
 using App.Persistence.Database;
 using App.Persistence.DataProvider;
@@ -46,10 +47,14 @@ namespace App.Web
             services.AddMemoryCache();
             services.AddDbContext<IAppDbContext, AppDbContext>();
 
-            services.AddControllers().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
+            services.AddMessagePack();
+
+            services.AddControllers(options => options.RespectBrowserAcceptHeader = true)
+                .AddXmlDataContractSerializerFormatters()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
         }
 
         /// <summary>
