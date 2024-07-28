@@ -5,11 +5,14 @@ using App.Domain;
 
 namespace App.Persistence.Database
 {
+    /// <summary>
+    /// Database context definition
+    /// </summary>
     public partial class AppDbContext : DbContext, IAppDbContext
     {
-        private readonly IOptions<DatabaseConfiguration> _databaseConfiguration;
+        private readonly IOptions<DatabaseConfig> _databaseConfiguration;
 
-        public AppDbContext(IOptions<DatabaseConfiguration> databaseConfiguration)
+        public AppDbContext(IOptions<DatabaseConfig> databaseConfiguration)
         {
             _databaseConfiguration = databaseConfiguration;
         }

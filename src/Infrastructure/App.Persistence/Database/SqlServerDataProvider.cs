@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace App.Persistence.Database
 {
+    /// <summary>
+    /// Represents SQL server data provider
+    /// </summary>
     public partial class SqlServerDataProvider : BaseDataProvider, IDataProvider
     {
         private readonly AppDbContext _appDbContext;

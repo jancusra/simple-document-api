@@ -36,7 +36,7 @@ namespace App.Web
             ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
 
             services.Configure<StorageTypeConfig>(_configuration);
-            services.Configure<DatabaseConfiguration>(_configuration);
+            services.Configure<DatabaseConfig>(_configuration);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -68,9 +68,6 @@ namespace App.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-            //app.UseMiddleware<ErrorWrappingMiddleware>();
 
             app.UseRouting();
 

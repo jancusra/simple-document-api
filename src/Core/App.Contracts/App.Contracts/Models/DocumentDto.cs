@@ -4,6 +4,9 @@ using MessagePack;
 
 namespace App.Contracts.Models
 {
+    /// <summary>
+    /// Represents Document DTO model
+    /// </summary>
     public partial class DocumentDto : BaseDto
     {
         public DocumentDto()
@@ -11,10 +14,16 @@ namespace App.Contracts.Models
             data = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// array of string tags
+        /// </summary>
         [DataMember]
         [Key(1)]
         public string[] tags { get; set; }
 
+        /// <summary>
+        /// additional document data
+        /// </summary>
         [DataMember]
         [Key(2)]
         public IDictionary<string, string> data { get; set; }

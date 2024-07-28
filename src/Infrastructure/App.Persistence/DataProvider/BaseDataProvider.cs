@@ -4,32 +4,38 @@ using App.Domain;
 
 namespace App.Persistence.DataProvider
 {
+    /// <summary>
+    /// Represents a template for the basic data provider
+    /// </summary>
     public abstract class BaseDataProvider
     {
         /// <summary>
-        /// Factory method
+        /// Get document/entity by ID
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <typeparam name="TEntity">document type</typeparam>
+        /// <param name="id">document unique identifier</param>
+        /// <returns>final entity</returns>
         public abstract Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity;
 
         /// <summary>
-        /// Factory method
+        /// Insert document/entity
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <typeparam name="TEntity">document type</typeparam>
+        /// <param name="entity">specific document with identifier</param>
         public abstract Task InsertDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
         /// <summary>
-        /// Factory method
+        /// Update document/entity
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <typeparam name="TEntity">document type</typeparam>
+        /// <param name="entity">specific document with identifier</param>
         public abstract Task UpdateDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
+        /// <summary>
+        /// Adding a document in a safe way (by unique identifier)
+        /// </summary>
+        /// <typeparam name="TEntity">document type</typeparam>
+        /// <param name="entity">specific document with identifier</param>
         public virtual async Task AddDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
             var doc = await GetDocumentByIdAsync<TEntity>(entity.Id);

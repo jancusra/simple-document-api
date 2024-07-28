@@ -18,6 +18,11 @@ namespace Rat.Endpoint.Controllers
             _dataProvider = dataProvider;
         }
 
+        /// <summary>
+        /// Get document by ID
+        /// </summary>
+        /// <param name="id">document ID</param>
+        /// <returns>final document in DTO model</returns>
         [Route("[controller]/{id}")]
         [HttpGet]
         public virtual async Task<IActionResult> Get(Guid id)
@@ -27,6 +32,11 @@ namespace Rat.Endpoint.Controllers
             return Ok(result.ToDtoModel());
         }
 
+        /// <summary>
+        /// Add new document
+        /// </summary>
+        /// <param name="model">document to add in DTO</param>
+        /// <returns>OK result</returns>
         [Route("[controller]")]
         [HttpPost]
         public virtual async Task<IActionResult> AddDocument([FromBody]DocumentDto model)
@@ -36,6 +46,11 @@ namespace Rat.Endpoint.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Update existing document
+        /// </summary>
+        /// <param name="model">document to update in DTO</param>
+        /// <returns>OK result</returns>
         [Route("[controller]")]
         [HttpPut]
         public virtual async Task<IActionResult> UpdateDocument([FromBody]DocumentDto model)
