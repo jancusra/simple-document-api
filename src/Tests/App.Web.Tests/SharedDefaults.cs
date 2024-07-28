@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace App.Web.Tests
+﻿namespace App.Web.Tests
 {
     public static partial class SharedDefaults
     {
