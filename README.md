@@ -19,5 +19,6 @@
 
 6. Demonstrate ability to write unit tests. \
 **Added 2 unit tests for cache memory operations, also added 3 integration tests to test all response formats JSON/XML/MessagePack**
-\
+
+[//]: # 
 Note: If you want to run tests in SQL server mode, first run the application with the correct DB connection string (the database and table will be created automatically)
