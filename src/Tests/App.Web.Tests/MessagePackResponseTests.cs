@@ -10,6 +10,9 @@ using App.Contracts.Models;
 
 namespace App.Web.Tests
 {
+    /// <summary>
+    /// Partial class representing the integration test (API response in MessagePack format)
+    /// </summary>
     public partial class ApiIntegrationTests
     {
         [Fact]

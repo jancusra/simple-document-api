@@ -12,6 +12,9 @@ using App.Contracts.Models;
 
 namespace App.Web.Tests
 {
+    /// <summary>
+    /// Partial class representing the integration test (API response in JSON format)
+    /// </summary>
     public partial class ApiIntegrationTests : IDisposable
     {
         private readonly TestServer _testServer;
@@ -33,6 +36,7 @@ namespace App.Web.Tests
         {
             var client = _testServer.CreateClient();
 
+            // prepare a test identifier and document
             Guid documentId = Guid.NewGuid();
             var document = new DocumentDto
             {
@@ -44,16 +48,19 @@ namespace App.Web.Tests
                 }
             };
 
+            // create a test document using the POST api method
             var content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, SharedDefaults.ContentTypeJson);
             var saveResponse = await client.PostAsync($"{SharedDefaults.ApplicationUrl}/documents", content);
 
             Assert.Equal(HttpStatusCode.OK, saveResponse.StatusCode);
 
+            // retrieve a test document by a known identifier
             client.DefaultRequestHeaders.Add(SharedDefaults.HeaderAcceptKey, SharedDefaults.ContentTypeJson);
             var getResponse = await client.GetAsync($"{SharedDefaults.ApplicationUrl}/documents/{documentId}");
 
             Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
+            // parse the GET response and check the results
             var getData = await getResponse.Content.ReadAsStringAsync();
             var model = JsonSerializer.Deserialize<DocumentDto>(getData);
 

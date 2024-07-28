@@ -2,9 +2,9 @@
 {
     public static partial class SharedDefaults
     {
-        public static string ConfigurationFile = "appsettings.json";
+        public static string ConfigurationFile => "appsettings.json";
 
-        public static string ApplicationUrl = "http://localhost:5000";
+        public static string ApplicationUrl => "http://localhost:5000";
 
         public static string HeaderAcceptKey => "Accept";
 

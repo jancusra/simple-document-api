@@ -7,6 +7,9 @@ using App.Persistence.Memory;
 
 namespace App.Persistence.Tests
 {
+    /// <summary>
+    /// Examples of unit tests for an memory data provider
+    /// </summary>
     public class MemoryUnitTests
     {
         [Fact]
