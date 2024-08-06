@@ -25,7 +25,7 @@ namespace App.Persistence.Database
 
         public override async Task InsertDocumentAsync<TEntity>(TEntity entity)
         {
-            await _appDbContext.Set<TEntity>().AddAsync(entity);
+            _appDbContext.Set<TEntity>().Add(entity);
             await _appDbContext.SaveChangesAsync();
         }
 
