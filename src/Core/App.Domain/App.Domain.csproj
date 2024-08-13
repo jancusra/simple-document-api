@@ -6,6 +6,10 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Alphacloud.MessagePack.AspNetCore.Formatters" Version="4.1.0" />
   </ItemGroup>	
 
 </Project>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using App.Contracts.Models;
 using App.Domain.Entities;
+using App.Domain.Exceptions;
 using App.Mapper;
 using App.Persistence.DataProvider;
 
@@ -28,6 +29,11 @@ namespace Rat.Endpoint.Controllers
         public virtual async Task<IActionResult> Get(Guid id)
         {
             var result = await _dataProvider.GetDocumentByIdAsync<Document>(id);
+
+            if (result == null)
+            {
+                throw new NonExistingEntityEntryException(nameof(Document), id);
+            }
 
             return Ok(result.ToDtoModel());
         }

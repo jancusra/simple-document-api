@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MessagePack;
 using App.Contracts.Models;
+using App.Domain;
 
 namespace App.Web.Tests
 {
@@ -31,12 +32,12 @@ namespace App.Web.Tests
                 }
             };
 
-            var content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, SharedDefaults.ContentTypeJson);
+            var content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, HttpDefaults.ContentTypeJson);
             var saveResponse = await client.PostAsync($"{SharedDefaults.ApplicationUrl}/documents", content);
 
             Assert.Equal(HttpStatusCode.OK, saveResponse.StatusCode);
 
-            client.DefaultRequestHeaders.Add(SharedDefaults.HeaderAcceptKey, SharedDefaults.ContentTypeMessagePack);
+            client.DefaultRequestHeaders.Add(HttpDefaults.HeaderAcceptKey, HttpDefaults.ContentTypeMessagePack);
             var getResponse = await client.GetAsync($"{SharedDefaults.ApplicationUrl}/documents/{documentId}");
 
             Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);

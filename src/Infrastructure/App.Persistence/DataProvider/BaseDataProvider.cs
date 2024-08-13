@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Domain;
+using App.Domain.Exceptions;
 
 namespace App.Persistence.DataProvider
 {
@@ -32,7 +33,7 @@ namespace App.Persistence.DataProvider
         public abstract Task UpdateDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
         /// <summary>
-        /// Adding a document in a safe way (by unique identifier)
+        /// Adding a document in a safe way (by unique identifier) or throw exception if entity already exists
         /// </summary>
         /// <typeparam name="TEntity">document type</typeparam>
         /// <param name="entity">specific document with identifier</param>
@@ -43,6 +44,10 @@ namespace App.Persistence.DataProvider
             if (doc == null)
             {
                 await InsertDocumentAsync(entity);
+            }
+            else
+            {
+                throw new EntityEntryAlreadyExistsException(typeof(TEntity).Name, entity.Id);
             }
         }
     }

@@ -10,6 +10,7 @@ using Alphacloud.MessagePack.AspNetCore.Formatters;
 using App.Persistence;
 using App.Persistence.Database;
 using App.Persistence.DataProvider;
+using App.Domain.ErrorMiddleware;
 
 namespace App.Web
 {
@@ -70,6 +71,7 @@ namespace App.Web
             }
 
             app.UseRouting();
+            app.UseMiddleware<ErrorWrappingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

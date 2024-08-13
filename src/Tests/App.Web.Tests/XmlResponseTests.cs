@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
 using App.Contracts.Models;
+using App.Domain;
 
 namespace App.Web.Tests
 {
@@ -32,12 +33,12 @@ namespace App.Web.Tests
                 }
             };
 
-            var content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, SharedDefaults.ContentTypeJson);
+            var content = new StringContent(JsonSerializer.Serialize(document), Encoding.UTF8, HttpDefaults.ContentTypeJson);
             var saveResponse = await client.PostAsync($"{SharedDefaults.ApplicationUrl}/documents", content);
 
             Assert.Equal(HttpStatusCode.OK, saveResponse.StatusCode);
 
-            client.DefaultRequestHeaders.Add(SharedDefaults.HeaderAcceptKey, SharedDefaults.ContentTypeXml);
+            client.DefaultRequestHeaders.Add(HttpDefaults.HeaderAcceptKey, HttpDefaults.ContentTypeXml);
             var getResponse = await client.GetAsync($"{SharedDefaults.ApplicationUrl}/documents/{documentId}");
 
             Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
@@ -47,7 +48,7 @@ namespace App.Web.Tests
             DataContractSerializer dcs = new DataContractSerializer(typeof(DocumentDto));
             var reader = XmlDictionaryReader.CreateTextReader(getDataBytes, new XmlDictionaryReaderQuotas());
 
-            DocumentDto? model = dcs.ReadObject(reader) as DocumentDto;
+            DocumentDto model = dcs.ReadObject(reader) as DocumentDto;
             reader.Close();
 
             Assert.Equal(documentId.ToString().ToLower(), model?.id.ToString().ToLower());
