@@ -1,4 +1,5 @@
 # Simple API with different data sources and different response types
+#### [ FULLY FUNCTIONAL, BUT NOT MAINTAINED CODE (ONLY FOR DEMONSTRATION) ]
 
 ### Assignment: Create production-ready ASP.NET Core service app that provides API for storage and retrive documents in different formats
 
