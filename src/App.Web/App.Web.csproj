@@ -2,7 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-	</PropertyGroup>
+	  <UserSecretsId>b9b51833-9edb-4dd2-b298-511d99a2c823</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Api\App.Endpoint\App.Endpoint.csproj" />

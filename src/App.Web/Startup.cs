@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Alphacloud.MessagePack.AspNetCore.Formatters;
 using App.Persistence;
 using App.Persistence.Database;
@@ -51,7 +53,11 @@ namespace App.Web
             // When absent the limit is null and the store keeps every entry (unbounded).
             var cacheSizeLimit = _configuration.GetValue<long?>("CacheSizeLimit");
             services.AddMemoryCache(options => options.SizeLimit = cacheSizeLimit);
-            services.AddDbContext<IAppDbContext, AppDbContext>();
+            services.AddDbContext<IAppDbContext, AppDbContext>((serviceProvider, options) =>
+            {
+                var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>();
+                options.UseSqlServer(databaseConfig.Value.ConnectionString);
+            });
 
             services.AddMessagePack();
 
@@ -72,6 +78,11 @@ namespace App.Web
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
+
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
+            services.AddHealthChecks();
         }
 
         /// <summary>
@@ -84,6 +95,8 @@ namespace App.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseResponseCompression();
@@ -94,6 +107,7 @@ namespace App.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

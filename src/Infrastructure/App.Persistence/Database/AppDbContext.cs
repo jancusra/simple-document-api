@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using App.Domain.Entities;
 using App.Domain;
 
@@ -10,16 +9,9 @@ namespace App.Persistence.Database
     /// </summary>
     public partial class AppDbContext : DbContext, IAppDbContext
     {
-        private readonly IOptions<DatabaseConfig> _databaseConfiguration;
-
-        public AppDbContext(IOptions<DatabaseConfig> databaseConfiguration)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
         {
-            _databaseConfiguration = databaseConfiguration;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_databaseConfiguration.Value.ConnectionString);
         }
 
         public DbSet<TEntity> Table<TEntity>() where TEntity : BaseEntity

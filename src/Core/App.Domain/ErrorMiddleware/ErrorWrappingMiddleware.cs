@@ -1,6 +1,8 @@
-﻿using System.Net;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using App.Domain.Exceptions;
 using App.Domain.Responses;
 
@@ -13,9 +15,12 @@ namespace App.Domain.ErrorMiddleware
     {
         private readonly RequestDelegate next;
 
-        public ErrorWrappingMiddleware(RequestDelegate next)
+        private readonly ILogger<ErrorWrappingMiddleware> _logger;
+
+        public ErrorWrappingMiddleware(RequestDelegate next, ILogger<ErrorWrappingMiddleware> logger)
         {
             this.next = next;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,14 +35,27 @@ namespace App.Domain.ErrorMiddleware
             }
             catch (BaseResponseException baseResponseException)
             {
+                // Expected business error (e.g. 400/404/409) - logged for visibility, not as a failure.
+                _logger.LogInformation(
+                    "Handled API exception ({StatusCode}): {Message}",
+                    baseResponseException.ResponseState.HttpStatusCode,
+                    baseResponseException.Message);
+
                 await SendResponseIfNotStarted(context, baseResponseException.ResponseState);
             }
-            catch
+            catch (Exception exception)
             {
-                await SendResponseIfNotStarted(context, 
-                new ResponseState { 
-                    Code = 10000, 
-                    HttpStatusCode = (int)HttpStatusCode.InternalServerError, 
+                _logger.LogError(
+                    exception,
+                    "Unhandled exception while processing {Method} {Path}",
+                    context.Request.Method,
+                    context.Request.Path);
+
+                await SendResponseIfNotStarted(context,
+                new ResponseState
+                {
+                    Code = 10000,
+                    HttpStatusCode = (int)HttpStatusCode.InternalServerError,
                     Message = "Internal Server Error"
                 });
             }

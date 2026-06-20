@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,6 +27,13 @@ namespace App.Web.Tests
                 .ConfigureAppConfiguration(configurationBuilder =>
                 {
                     configurationBuilder.AddJsonFile(SharedDefaults.ConfigurationFile);
+
+                    // Integration tests must be deterministic and self-contained, so always use
+                    // in-memory storage regardless of the deployment configuration.
+                    configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
+                    {
+                        ["StorageType"] = "memory"
+                    });
                 })
                 .UseStartup<Startup>();
 
