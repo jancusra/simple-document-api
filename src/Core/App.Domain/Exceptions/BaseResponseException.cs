@@ -4,7 +4,7 @@ using App.Domain.Responses;
 namespace App.Domain.Exceptions
 {
     /// <summary>
-    /// Core base api response exception
+    /// Core base API response exception
     /// </summary>
     public partial class BaseResponseException : Exception
     {

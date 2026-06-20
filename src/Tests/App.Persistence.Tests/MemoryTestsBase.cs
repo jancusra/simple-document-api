@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace App.Persistence.Tests
 {
     /// <summary>
-    /// Base class for initializing the tested cache memory
+    /// Base class for initializing the tested memory cache
     /// </summary>
     public abstract class MemoryTestsBase : IDisposable
     {

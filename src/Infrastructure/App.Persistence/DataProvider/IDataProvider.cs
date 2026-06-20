@@ -15,7 +15,7 @@ namespace App.Persistence.DataProvider
         public Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity;
 
         /// <summary>
-        /// Insert document/entity
+        /// Add document/entity in a safe way (throws if it already exists)
         /// </summary>
         /// <typeparam name="TEntity">document type</typeparam>
         /// <param name="entity">specific document with identifier</param>

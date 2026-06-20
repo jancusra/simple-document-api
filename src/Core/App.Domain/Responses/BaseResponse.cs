@@ -4,7 +4,7 @@ using MessagePack;
 namespace App.Domain.Responses
 {
     /// <summary>
-    /// Defines the basic api response model
+    /// Defines the basic API response model
     /// </summary>
     [DataContract]
     [MessagePackObject]

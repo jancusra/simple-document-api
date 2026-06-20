@@ -24,7 +24,7 @@ namespace App.Web
         }
 
         /// <summary>
-        /// Creating an application host builder by configuration
+        /// Create the application host builder from configuration
         /// </summary>
         /// <param name="args">app arguments</param>
         /// <returns>final host builder</returns>

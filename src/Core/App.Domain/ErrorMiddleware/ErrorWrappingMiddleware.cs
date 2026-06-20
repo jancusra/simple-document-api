@@ -19,7 +19,7 @@ namespace App.Domain.ErrorMiddleware
         }
 
         /// <summary>
-        /// Method to catch api exceptions
+        /// Method to catch API exceptions
         /// </summary>
         /// <param name="context">HTTP context</param>
         public async Task Invoke(HttpContext context)

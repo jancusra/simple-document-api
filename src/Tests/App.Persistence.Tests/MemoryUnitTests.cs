@@ -5,7 +5,7 @@ using App.Domain.Entities;
 namespace App.Persistence.Tests
 {
     /// <summary>
-    /// Examples of unit tests for an memory cache
+    /// Examples of unit tests for a memory cache
     /// </summary>
     public class MemoryUnitTests : MemoryTestsBase
     {

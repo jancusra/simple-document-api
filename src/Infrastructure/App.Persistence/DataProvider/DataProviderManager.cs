@@ -28,10 +28,10 @@ namespace App.Persistence.DataProvider
         }
 
         /// <summary>
-        /// Get configured data manager
+        /// Get the configured data provider
         /// </summary>
         /// <returns>data provider</returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">thrown when the configured storage type is not supported</exception>
         public IDataProvider GetDataProvider()
         {
             return _storageType.Value.StorageType switch

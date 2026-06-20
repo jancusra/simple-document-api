@@ -5,7 +5,7 @@ using App.Domain.Responses;
 namespace App.Domain.Exceptions
 {
     /// <summary>
-    /// Exception for non existing entity
+    /// Exception for a non-existing entity
     /// </summary>
     public partial class NonExistingEntityEntryException : BaseResponseException
     {
