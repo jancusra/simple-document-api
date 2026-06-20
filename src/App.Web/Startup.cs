@@ -1,8 +1,10 @@
+using System.IO.Compression;
 using System.Net;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -53,6 +55,17 @@ namespace App.Web
 
             services.AddMessagePack();
 
+            // The service is read-heavy, so compress responses to cut bandwidth and latency.
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<BrotliCompressionProvider>();
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+
+            services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+
             services.AddControllers(options => options.RespectBrowserAcceptHeader = true)
                 .AddXmlDataContractSerializerFormatters()
                 .AddJsonOptions(options =>
@@ -72,6 +85,8 @@ namespace App.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseResponseCompression();
 
             app.UseRouting();
             app.UseMiddleware<ErrorWrappingMiddleware>();

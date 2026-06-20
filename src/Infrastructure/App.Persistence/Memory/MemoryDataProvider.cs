@@ -23,25 +23,23 @@ namespace App.Persistence.Memory
                 .SetSize(1);
         }
 
-        public override async Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id)
+        public override Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id)
         {
             var result = _memoryCache.Get(id.ToString().ToLower());
 
-            if (result != null && result is TEntity)
+            if (result is TEntity entity)
             {
-                return (TEntity)result;
+                return Task.FromResult(entity);
             }
 
-            await Task.FromResult(0);
-
-            return null;
+            return Task.FromResult<TEntity>(default);
         }
 
-        public override async Task InsertDocumentAsync<TEntity>(TEntity entity)
+        public override Task InsertDocumentAsync<TEntity>(TEntity entity)
         {
             _memoryCache.Set(entity.Id.ToString().ToLower(), entity, options: _memoryCacheEntryOptions);
 
-            await Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         public override async Task UpdateDocumentAsync<TEntity>(TEntity entity)
