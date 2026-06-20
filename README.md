@@ -1,5 +1,7 @@
 # Simple Document API - multiple storages & response formats
 
+[![all tests](https://github.com/jancusra/simple-document-api/actions/workflows/ci.yml/badge.svg)](https://github.com/jancusra/simple-document-api/actions/workflows/ci.yml)
+
 A small ASP.NET Core (.NET 8) service that stores documents (sent as JSON) and returns them in
 different formats (JSON / XML / MessagePack) selected via the `Accept` header. The underlying
 storage is pluggable (in-memory or SQL Server) and switchable through configuration.
