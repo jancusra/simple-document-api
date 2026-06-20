@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Rat.Endpoint.Controllers
+namespace App.Endpoint.Controllers
 {
     [ApiController]
     [Route("[controller]")]

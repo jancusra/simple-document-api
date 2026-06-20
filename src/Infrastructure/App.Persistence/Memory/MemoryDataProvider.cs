@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Caching.Memory;
+using App.Domain.Exceptions;
 using App.Persistence.DataProvider;
 
 namespace App.Persistence.Memory
@@ -10,6 +11,11 @@ namespace App.Persistence.Memory
     /// </summary>
     public partial class MemoryDataProvider : BaseDataProvider, IDataProvider
     {
+        // The memory cache is a singleton shared across all provider instances, so writes are
+        // serialized through a shared lock to keep "check then write" atomic under concurrency.
+        // Reads go straight to the (thread-safe) cache and are never blocked.
+        private static readonly object _writeLock = new object();
+
         private readonly IMemoryCache _memoryCache;
 
         private readonly MemoryCacheEntryOptions _memoryCacheEntryOptions;
@@ -35,18 +41,38 @@ namespace App.Persistence.Memory
             return Task.FromResult<TEntity>(default);
         }
 
-        public override Task InsertDocumentAsync<TEntity>(TEntity entity)
+        public override Task AddDocumentAsync<TEntity>(TEntity entity)
         {
-            _memoryCache.Set(entity.Id.ToString().ToLower(), entity, options: _memoryCacheEntryOptions);
+            var key = entity.Id.ToString().ToLower();
+
+            lock (_writeLock)
+            {
+                if (_memoryCache.TryGetValue(key, out _))
+                {
+                    throw new EntityEntryAlreadyExistsException(typeof(TEntity).Name, entity.Id);
+                }
+
+                _memoryCache.Set(key, entity, _memoryCacheEntryOptions);
+            }
 
             return Task.CompletedTask;
         }
 
-        public override async Task UpdateDocumentAsync<TEntity>(TEntity entity)
+        public override Task UpdateDocumentAsync<TEntity>(TEntity entity)
         {
-            await EnsureEntityExistsAsync<TEntity>(entity.Id);
+            var key = entity.Id.ToString().ToLower();
 
-            _memoryCache.Set(entity.Id.ToString().ToLower(), entity, options: _memoryCacheEntryOptions);
+            lock (_writeLock)
+            {
+                if (!_memoryCache.TryGetValue(key, out _))
+                {
+                    throw new NonExistingEntityEntryException(typeof(TEntity).Name, entity.Id);
+                }
+
+                _memoryCache.Set(key, entity, _memoryCacheEntryOptions);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

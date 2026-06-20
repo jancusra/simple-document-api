@@ -7,7 +7,7 @@ using App.Domain.Exceptions;
 using App.Mapper;
 using App.Persistence.DataProvider;
 
-namespace Rat.Endpoint.Controllers
+namespace App.Endpoint.Controllers
 {
     [ApiController]
     public partial class DocumentsController : ControllerBase
@@ -45,7 +45,7 @@ namespace Rat.Endpoint.Controllers
         /// <returns>OK result</returns>
         [Route("[controller]")]
         [HttpPost]
-        public virtual async Task<IActionResult> AddDocument([FromBody]DocumentDto model)
+        public virtual async Task<IActionResult> AddDocument([FromBody] DocumentDto model)
         {
             ValidateDocument(model);
 
@@ -61,7 +61,7 @@ namespace Rat.Endpoint.Controllers
         /// <returns>OK result</returns>
         [Route("[controller]")]
         [HttpPut]
-        public virtual async Task<IActionResult> UpdateDocument([FromBody]DocumentDto model)
+        public virtual async Task<IActionResult> UpdateDocument([FromBody] DocumentDto model)
         {
             ValidateDocument(model);
 

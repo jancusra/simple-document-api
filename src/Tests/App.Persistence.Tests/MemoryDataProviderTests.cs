@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using App.Domain.Entities;
 using App.Domain.Exceptions;
@@ -71,6 +72,31 @@ namespace App.Persistence.Tests
 
             await Assert.ThrowsAsync<NonExistingEntityEntryException>(
                 () => _provider.UpdateDocumentAsync(document));
+        }
+
+        [Fact]
+        public async Task ConcurrentAdd_SameId_OnlyOneSucceeds()
+        {
+            var id = Guid.NewGuid();
+            const int attempts = 20;
+
+            var tasks = Enumerable.Range(0, attempts).Select(_ => Task.Run(async () =>
+            {
+                try
+                {
+                    await _provider.AddDocumentAsync(new Document { Id = id, Value = "value" });
+                    return true;
+                }
+                catch (EntityEntryAlreadyExistsException)
+                {
+                    return false;
+                }
+            }));
+
+            var results = await Task.WhenAll(tasks);
+
+            // Exactly one concurrent add must win; the rest must be rejected as duplicates.
+            Assert.Equal(1, results.Count(succeeded => succeeded));
         }
     }
 }

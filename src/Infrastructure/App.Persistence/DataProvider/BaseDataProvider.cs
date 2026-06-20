@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using App.Domain;
 using App.Domain.Exceptions;
@@ -19,37 +19,19 @@ namespace App.Persistence.DataProvider
         public abstract Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id) where TEntity : BaseEntity;
 
         /// <summary>
-        /// Insert document/entity
+        /// Add a document/entity in a safe way (by unique identifier) or throw if it already exists.
+        /// Implementations must perform the check and the write atomically.
         /// </summary>
         /// <typeparam name="TEntity">document type</typeparam>
         /// <param name="entity">specific document with identifier</param>
-        public abstract Task InsertDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
+        public abstract Task AddDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
         /// <summary>
-        /// Update document/entity
+        /// Update an existing document/entity or throw if it does not exist
         /// </summary>
         /// <typeparam name="TEntity">document type</typeparam>
         /// <param name="entity">specific document with identifier</param>
         public abstract Task UpdateDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
-
-        /// <summary>
-        /// Adding a document in a safe way (by unique identifier) or throw exception if entity already exists
-        /// </summary>
-        /// <typeparam name="TEntity">document type</typeparam>
-        /// <param name="entity">specific document with identifier</param>
-        public virtual async Task AddDocumentAsync<TEntity>(TEntity entity) where TEntity : BaseEntity
-        {
-            var doc = await GetDocumentByIdAsync<TEntity>(entity.Id);
-
-            if (doc == null)
-            {
-                await InsertDocumentAsync(entity);
-            }
-            else
-            {
-                throw new EntityEntryAlreadyExistsException(typeof(TEntity).Name, entity.Id);
-            }
-        }
 
         /// <summary>
         /// Guard that throws when the entity to be updated does not exist
