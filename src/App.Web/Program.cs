@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using App.Persistence;
 using App.Persistence.Database;
 
 namespace App.Web
@@ -41,8 +43,15 @@ namespace App.Web
         {
             using (var scope = serviceProvider.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.EnsureCreated();
+                var storageType = scope.ServiceProvider
+                    .GetRequiredService<IOptions<StorageTypeConfig>>().Value.StorageType;
+
+                // Only the SQL Server storage needs a physical database/table to be created.
+                if (storageType == StorageType.SqlServer)
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    context.Database.EnsureCreated();
+                }
             }
         }
     }

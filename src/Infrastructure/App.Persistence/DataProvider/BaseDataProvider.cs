@@ -50,5 +50,20 @@ namespace App.Persistence.DataProvider
                 throw new EntityEntryAlreadyExistsException(typeof(TEntity).Name, entity.Id);
             }
         }
+
+        /// <summary>
+        /// Guard that throws when the entity to be updated does not exist
+        /// </summary>
+        /// <typeparam name="TEntity">document type</typeparam>
+        /// <param name="id">document unique identifier</param>
+        protected async Task EnsureEntityExistsAsync<TEntity>(Guid id) where TEntity : BaseEntity
+        {
+            var doc = await GetDocumentByIdAsync<TEntity>(id);
+
+            if (doc == null)
+            {
+                throw new NonExistingEntityEntryException(typeof(TEntity).Name, id);
+            }
+        }
     }
 }

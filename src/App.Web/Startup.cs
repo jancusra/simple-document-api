@@ -45,7 +45,10 @@ namespace App.Web
                     .AddTransient(serviceProvider =>
                         serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
 
-            services.AddMemoryCache();
+            // Optional "CacheSizeLimit" config key bounds the in-memory store (LRU eviction).
+            // When absent the limit is null and the store keeps every entry (unbounded).
+            var cacheSizeLimit = _configuration.GetValue<long?>("CacheSizeLimit");
+            services.AddMemoryCache(options => options.SizeLimit = cacheSizeLimit);
             services.AddDbContext<IAppDbContext, AppDbContext>();
 
             services.AddMessagePack();

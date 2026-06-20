@@ -20,7 +20,7 @@ namespace App.Persistence.Database
 
         public override async Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id)
         {
-            return await _appDbContext.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
+            return await _appDbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public override async Task InsertDocumentAsync<TEntity>(TEntity entity)
@@ -31,6 +31,8 @@ namespace App.Persistence.Database
 
         public override async Task UpdateDocumentAsync<TEntity>(TEntity entity)
         {
+            await EnsureEntityExistsAsync<TEntity>(entity.Id);
+
             _appDbContext.Set<TEntity>().Update(entity);
             await _appDbContext.SaveChangesAsync();
         }

@@ -17,8 +17,10 @@ namespace App.Persistence.Memory
         public MemoryDataProvider(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
+            // Each entry counts as one unit against the cache size limit (if one is configured).
+            // When no limit is configured the size is ignored and entries are kept indefinitely.
             _memoryCacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetPriority(CacheItemPriority.NeverRemove);
+                .SetSize(1);
         }
 
         public override async Task<TEntity> GetDocumentByIdAsync<TEntity>(Guid id)
@@ -44,9 +46,9 @@ namespace App.Persistence.Memory
 
         public override async Task UpdateDocumentAsync<TEntity>(TEntity entity)
         {
-            _memoryCache.Set(entity.Id.ToString().ToLower(), entity, options: _memoryCacheEntryOptions);
+            await EnsureEntityExistsAsync<TEntity>(entity.Id);
 
-            await Task.FromResult(0);
+            _memoryCache.Set(entity.Id.ToString().ToLower(), entity, options: _memoryCacheEntryOptions);
         }
     }
 }
