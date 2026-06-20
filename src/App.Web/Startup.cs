@@ -1,5 +1,4 @@
 using System.IO.Compression;
-using System.Net;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,14 +20,10 @@ namespace App.Web
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public Startup(
-            IConfiguration configuration,
-            IWebHostEnvironment webHostEnvironment)
+        public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -37,9 +32,6 @@ namespace App.Web
         /// <param name="services">collection of services</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            //see https://docs.microsoft.com/dotnet/framework/network-programming/tls
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
-
             services.Configure<StorageTypeConfig>(_configuration);
             services.Configure<DatabaseConfig>(_configuration);
 
@@ -53,7 +45,7 @@ namespace App.Web
             // When absent the limit is null and the store keeps every entry (unbounded).
             var cacheSizeLimit = _configuration.GetValue<long?>("CacheSizeLimit");
             services.AddMemoryCache(options => options.SizeLimit = cacheSizeLimit);
-            services.AddDbContext<IAppDbContext, AppDbContext>((serviceProvider, options) =>
+            services.AddDbContext<AppDbContext>((serviceProvider, options) =>
             {
                 var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>();
                 options.UseSqlServer(databaseConfig.Value.ConnectionString);

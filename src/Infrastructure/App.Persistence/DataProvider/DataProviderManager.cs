@@ -31,14 +31,14 @@ namespace App.Persistence.DataProvider
         /// Get the configured data provider
         /// </summary>
         /// <returns>data provider</returns>
-        /// <exception cref="Exception">thrown when the configured storage type is not supported</exception>
+        /// <exception cref="NotSupportedException">thrown when the configured storage type is not supported</exception>
         public IDataProvider GetDataProvider()
         {
             return _storageType.Value.StorageType switch
             {
                 StorageType.Memory => new MemoryDataProvider(_memoryCache),
                 StorageType.SqlServer => new SqlServerDataProvider(_appDbContext),
-                _ => throw new Exception($"Not supported data provider name: '{_storageType.Value.StorageType}'")
+                _ => throw new NotSupportedException($"Not supported storage type: '{_storageType.Value.StorageType}'")
             };
         }
 
