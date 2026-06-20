@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml;
 using App.Contracts.Models;
@@ -27,9 +27,10 @@ namespace App.Web.Tests
             {
                 id = documentId,
                 tags = ["xml", "integration-test"],
-                data = new Dictionary<string, string>() { 
-                    { "field1", "xml" }, 
-                    { "field2", "integration" }
+                data = new JsonObject
+                {
+                    ["field1"] = "xml",
+                    ["field2"] = "integration"
                 }
             };
 
@@ -53,7 +54,7 @@ namespace App.Web.Tests
 
             Assert.Equal(documentId.ToString().ToLower(), model?.id.ToString().ToLower());
             Assert.Equal(document.tags[0], model?.tags[0]);
-            Assert.Equal(document.data["field2"], model?.data["field2"]);
+            Assert.Equal(document.data["field2"].GetValue<string>(), model?.data?["field2"]?.GetValue<string>());
         }
     }
 }

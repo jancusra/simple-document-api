@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml;
 using MessagePack;
@@ -30,7 +30,7 @@ namespace App.Web.Tests
             {
                 id = Guid.NewGuid(),
                 tags = ["error", "integration-test"],
-                data = new Dictionary<string, string> { { "field", "value" } }
+                data = new JsonObject { ["field"] = "value" }
             };
         }
 

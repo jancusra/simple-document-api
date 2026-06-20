@@ -47,6 +47,8 @@ namespace Rat.Endpoint.Controllers
         [HttpPost]
         public virtual async Task<IActionResult> AddDocument([FromBody]DocumentDto model)
         {
+            ValidateDocument(model);
+
             await _dataProvider.AddDocumentAsync(model.ToEntity());
 
             return Ok();
@@ -61,9 +63,38 @@ namespace Rat.Endpoint.Controllers
         [HttpPut]
         public virtual async Task<IActionResult> UpdateDocument([FromBody]DocumentDto model)
         {
+            ValidateDocument(model);
+
             await _dataProvider.UpdateDocumentAsync(model.ToEntity());
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Validate that the document carries all mandatory fields (id, tags, data)
+        /// </summary>
+        /// <param name="model">document to validate in DTO</param>
+        private static void ValidateDocument(DocumentDto model)
+        {
+            if (model == null)
+            {
+                throw new InvalidEntityEntryException(nameof(Document), "the request body is missing");
+            }
+
+            if (model.id == Guid.Empty)
+            {
+                throw new InvalidEntityEntryException(nameof(Document), "the 'id' field is mandatory");
+            }
+
+            if (model.tags == null)
+            {
+                throw new InvalidEntityEntryException(nameof(Document), "the 'tags' field is mandatory");
+            }
+
+            if (model.data == null)
+            {
+                throw new InvalidEntityEntryException(nameof(Document), "the 'data' field is mandatory");
+            }
         }
     }
 }
